@@ -5,10 +5,10 @@ namespace CalculationEfficiency.Engine
 {
     public class DbHelper
     {
-        private const string Server = "31.31.196.158";
-        private const string DatabaseName = "u1582367_wb_base";
-        private const string UserName = "u1582367_wb_user";
-        private const string Password = "qS9oT9aX4m";
+        private const string Server = "***";
+        private const string DatabaseName = "***";
+        private const string UserName = "***";
+        private const string Password = "***";
 
         public readonly MySqlConnection Connection;
 
