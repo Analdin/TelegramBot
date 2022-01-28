@@ -25,7 +25,7 @@ namespace ReplyKeyboardMarkup_01
         {
             _client = new TelegramBotClient(_token);
             var me = _client.GetMeAsync().Result;
-            if(me != null && !string.IsNullOrEmpty(me.Username))
+            if (me != null && !string.IsNullOrEmpty(me.Username))
             {
                 int offset = 0;
                 while (true)
@@ -33,9 +33,9 @@ namespace ReplyKeyboardMarkup_01
                     try
                     {
                         var updates = _client.GetUpdatesAsync(offset).Result;
-                        if(updates != null && updates.Count() > 0)
+                        if (updates != null && updates.Count() > 0)
                         {
-                            foreach(var update in updates)
+                            foreach (var update in updates)
                             {
                                 processUpdate(update);
                                 offset = update.Id + 1;
@@ -52,7 +52,7 @@ namespace ReplyKeyboardMarkup_01
             }
         }
 
-        private void processUpdate(Update update)
+        private async void processUpdate(Update update)
         {
             DbHelper connect = new DbHelper();
             connect.OpenConnection();
@@ -61,6 +61,7 @@ namespace ReplyKeyboardMarkup_01
             {
                 case Telegram.Bot.Types.Enums.UpdateType.Message:
                     var text = update.Message.Text;
+                    //Console.WriteLine("text - " + text);
                     switch (text)
                     {
                         case TEXT_1:
@@ -114,13 +115,23 @@ namespace ReplyKeyboardMarkup_01
                             var command4 = new MySqlCommand(query4, connect.Connection);
                             command4.ExecuteNonQuery();
 
+                            _client.SendTextMessageAsync(update.Message.Chat.Id, "Введите ключевое слово:");
+
                             break;
                         default:
-                            //_client.SendTextMessageAsync(update.Message.Chat.Id, "Recieved text: " + text, replyMarkup: GetButtons());
+                            var query5 = $@"TRUNCATE TABLE `MyKey`";
+                            var command5 = new MySqlCommand(query5, connect.Connection);
+                            command5.ExecuteNonQuery();
+
+                            _client.SendTextMessageAsync(update.Message.Chat.Id, "Получен текст: " + text, replyMarkup: GetButtons());
+
+                            var query6 = $@"INSERT INTO `MyKey`(`UserKeyword`) VALUES ('{text}')";
+                            var command6 = new MySqlCommand(query6, connect.Connection);
+                            command6.ExecuteNonQuery();
 
                             break;
                     }
-                   // _client.SendTextMessageAsync(update.Message.Chat.Id, "Recive text :" + text, replyMarkup: GetButtons());
+                    _client.SendTextMessageAsync(update.Message.Chat.Id, "Нажали кнопку :" + text, replyMarkup: GetButtons());
                     break;
                 default:
                     Console.WriteLine(update.Type + " Not implemented");
@@ -128,7 +139,7 @@ namespace ReplyKeyboardMarkup_01
             }
             connect.CloseConnection();
         }
-        
+
 
         private IReplyMarkup GetButtons()
         {

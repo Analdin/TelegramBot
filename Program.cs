@@ -15,10 +15,11 @@ namespace ReplyKeyboardMarkup_01
             connect.CloseConnection();
 
             Console.WriteLine("Start!");
+            Console.ReadLine();
 
             try
             {
-                TelegramBotHelper hlp = new TelegramBotHelper(token: "***");
+                TelegramBotHelper hlp = new TelegramBotHelper(token: "5228504390:AAEJs2auWV1a4-0q02IhmHv-UPMASHSRsdA");
                 hlp.GetUpdates();
             }
             catch (Exception ex)
