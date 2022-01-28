@@ -19,7 +19,7 @@ namespace ReplyKeyboardMarkup_01
 
             try
             {
-                TelegramBotHelper hlp = new TelegramBotHelper(token: "5228504390:AAEJs2auWV1a4-0q02IhmHv-UPMASHSRsdA");
+                TelegramBotHelper hlp = new TelegramBotHelper(token: "***");
                 hlp.GetUpdates();
             }
             catch (Exception ex)
